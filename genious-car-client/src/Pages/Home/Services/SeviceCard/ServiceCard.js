@@ -13,7 +13,7 @@ const ServiceCard = ({ service }) => {
             <p className="text-orange-600 font-semibold text-xl">
               Price: ${price}
             </p>
-            <button className="btn bg-orange-600 hover:bg-orange-700 mr-5">
+            <button className="btn bg-orange-600 hover:bg-orange-700 border-none">
               Order
             </button>
           </div>
