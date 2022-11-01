@@ -11,7 +11,7 @@ const Header = () => {
     );
     return (
       <div>
-        <div className="navbar h-20 mb-12 bg-base-100">
+        <div className="navbar h-20 pt-12 mb-12 bg-base-100">
           <div className="navbar-start">
             <div className="dropdown">
               <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -45,7 +45,7 @@ const Header = () => {
             <ul className="menu menu-horizontal p-0">{menuItems}</ul>
           </div>
           <div className="navbar-end">
-            <button className="btn btn-outline btn-warning">Warning</button>
+            <button className="btn btn-outline btn-warning">Appointment</button>
           </div>
         </div>
       </div>
