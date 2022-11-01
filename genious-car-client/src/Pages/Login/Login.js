@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import img from "../../assets/images/login/login.svg";
+import { AuthContext } from "../../Context/AuthProvider";
 const Login = () => {
+  const { user, createUser } = useContext(AuthContext);
+
   const handleLogin = (event) => {
     event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    createUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -11,7 +25,7 @@ const Login = () => {
         <div className="lg:w-1/2 flex justify-center">
           <img className="lg:w-3/4 w-1/2" src={img} alt="" />
         </div>
-        <div className="card pt-5 flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+        <div className="card py-5 flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
           <h1 className="text-5xl text-center font-bold">Login now!</h1>
           {/* form */}
           <form onSubmit={handleLogin} className="card-body ">
@@ -20,9 +34,11 @@ const Login = () => {
                 <span className="label-text">Email</span>
               </label>
               <input
-                type="text"
+                type="email"
                 placeholder="email"
                 className="input input-bordered"
+                name="email"
+                required
               />
             </div>
             <div className="form-control">
@@ -33,6 +49,8 @@ const Login = () => {
                 type="text"
                 placeholder="password"
                 className="input input-bordered"
+                name="password"
+                required
               />
               <label className="label">
                 <a href="#" className="label-text-alt link link-hover">
@@ -48,6 +66,12 @@ const Login = () => {
               />
             </div>
           </form>
+          <p className="text-center">
+            New Here?
+            <Link className="text-orange-600 font-bold" to="/signup">
+              Sign Up
+            </Link>
+          </p>
         </div>
       </div>
     </div>
