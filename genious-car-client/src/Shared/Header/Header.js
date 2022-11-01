@@ -4,14 +4,14 @@ import logo from "../../assets/logo.svg";
 const Header = () => {
     const menuItems = (
       <>
-        <li>
+        <li className='font-semibold bg'>
           <Link to="/">Home</Link>
         </li>
       </>
     );
     return (
       <div>
-        <div className="navbar bg-base-100">
+        <div className="navbar h-20 mb-12 bg-base-100">
           <div className="navbar-start">
             <div className="dropdown">
               <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -37,15 +37,15 @@ const Header = () => {
                 {menuItems}
               </ul>
             </div>
-            <Link to='/' className="btn btn-ghost normal-case text-xl"><img src={logo} alt="" /></Link>
+            <Link to="/" className="btn btn-ghost normal-case text-xl">
+              <img src={logo} alt="" />
+            </Link>
           </div>
           <div className="navbar-center hidden lg:flex">
-            <ul className="menu menu-horizontal p-0">
-              {menuItems}
-            </ul>
+            <ul className="menu menu-horizontal p-0">{menuItems}</ul>
           </div>
           <div className="navbar-end">
-            <a className="btn">Get started</a>
+            <button className="btn btn-outline btn-warning">Warning</button>
           </div>
         </div>
       </div>
