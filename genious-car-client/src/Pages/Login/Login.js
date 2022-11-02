@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import img from "../../assets/images/login/login.svg";
 import { AuthContext } from "../../Context/AuthProvider";
 const Login = () => {
-  const { user, createUser } = useContext(AuthContext);
+  const { user, login } = useContext(AuthContext);
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -11,12 +11,15 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    createUser(email, password)
+    login(email, password)
       .then((result) => {
         const user = result.user;
         console.log(user);
+        form.reset();
       })
       .catch((err) => console.error(err));
+
+    
   };
 
   return (
@@ -46,7 +49,7 @@ const Login = () => {
                 <span className="label-text">Password</span>
               </label>
               <input
-                type="text"
+                type="password"
                 placeholder="password"
                 className="input input-bordered"
                 name="password"
