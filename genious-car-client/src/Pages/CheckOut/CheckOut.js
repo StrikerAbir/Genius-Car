@@ -60,7 +60,7 @@ const CheckOut = () => {
         <div className="absolute left-24 top-1/4">
           <h1 className="text-6xl font-bold text-white">Checkout</h1>
           <h2 className="text-4xl font-bold  text-orange-600 my-5">{title}</h2>
-          <h4 className="text-xl font-semibold text-white">Price : {price}</h4>
+          <h4 className="text-xl font-semibold text-white">Price : ${price}</h4>
         </div>
           </div>
           
