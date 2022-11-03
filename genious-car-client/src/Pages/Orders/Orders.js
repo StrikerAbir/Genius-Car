@@ -31,6 +31,28 @@ const Orders = () => {
           });
       }
     };
+
+    const handleStatus = id => {
+        fetch(`http://localhost:1000/orders/${id}`, {
+            method: 'PATCH',
+            headers:{
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({status:'Approved'})
+        })
+        .then(res=>res.json())
+            .then(data => {
+                console.log(data)
+                if (data.modifiedCount > 0) {
+                    const remaining = orders.filter(order => order._id !== id);
+                    const approved = orders.find(order => order._id === id);
+                    approved.status = 'Approved';
+                    const newOrders = [...remaining, approved];
+                    setOrders(newOrders);
+
+                }
+            })
+    }
   return (
     <div>
       <div className="relative">
@@ -52,7 +74,8 @@ const Orders = () => {
               <OrderRow
                 key={order._id}
                 order={order}
-                handleDelete={handleDelete}
+                    handleDelete={handleDelete}
+                    handleStatus={handleStatus}
               ></OrderRow>
             ))}
           </tbody>

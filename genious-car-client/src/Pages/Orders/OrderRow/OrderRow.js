@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
-const OrderRow = ({ order,handleDelete }) => {
-    const { _id, service, customer, price, serviceName, email, phone } = order;
+const OrderRow = ({ order,handleDelete,handleStatus }) => {
+    const { _id, service, customer, price, serviceName, email, phone,status } = order;
     const [orderService,setOrderService]= useState({})
     useEffect(() => {
         fetch(`http://localhost:1000/services/${service}`)
@@ -61,12 +61,24 @@ const OrderRow = ({ order,handleDelete }) => {
         </td>
         <td>Price: ${price}</td>
         <th>
-          <Link
-            to={`/checkout/${_id}`}
-            className="btn btn-sm bg-orange-600 hover:bg-orange-700 border-none"
-          >
-            details
-          </Link>
+          {status ? (
+            <>
+              <button
+                className="btn btn-outline text-green-600"
+              >
+                {status}
+              </button>
+            </>
+          ) : (
+            <>
+                            <button
+                                onClick={()=>handleStatus(_id)}
+                className="btn btn-sm bg-orange-600 hover:bg-orange-700 border-none"
+              >
+                Pending
+              </button>
+            </>
+          )}
         </th>
       </tr>
     );
