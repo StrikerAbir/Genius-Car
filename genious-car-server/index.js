@@ -39,6 +39,7 @@ async function run() {
 
         app.get('/orders', async (req, res) => {
             let query = {};
+            console.log(req.query)
             if (req.query.email) {
                 query={email: req.query.email}
             }

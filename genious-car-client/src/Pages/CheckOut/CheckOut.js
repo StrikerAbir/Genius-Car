@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useLoaderData } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthProvider";
 import checkout from "../../assets/images/checkout/checkout.png";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const CheckOut = () => {
   const { user } = useContext(AuthContext);
