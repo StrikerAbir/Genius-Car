@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
 
-const OrderRow = ({ order }) => {
-    const { service, customer, price, serviceName, email, phone } = order;
+import { Link } from 'react-router-dom';
+
+const OrderRow = ({ order,handleDelete }) => {
+    const { _id, service, customer, price, serviceName, email, phone } = order;
     const [orderService,setOrderService]= useState({})
     useEffect(() => {
         fetch(`http://localhost:1000/services/${service}`)
             .then(res => res.json())
             .then(data => setOrderService(data));
-    },[service])
+    }, [service])
+    
+    
     return (
       <tr>
         <th>
-          <button className="btn btn-circle btn-sm">
+          <button
+            onClick={() => handleDelete(_id)}
+            className="btn btn-circle btn-sm"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6"
@@ -54,7 +61,12 @@ const OrderRow = ({ order }) => {
         </td>
         <td>Price: ${price}</td>
         <th>
-          <button className="btn btn-ghost btn-xs">details</button>
+          <Link
+            to={`/checkout/${_id}`}
+            className="btn btn-sm bg-orange-600 hover:bg-orange-700 border-none"
+          >
+            details
+          </Link>
         </th>
       </tr>
     );

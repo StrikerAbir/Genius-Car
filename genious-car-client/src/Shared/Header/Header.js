@@ -12,11 +12,12 @@ const Header = () => {
     <>
       <li className="font-semibold bg">
         <Link to="/">Home</Link>
-        <Link to="/orders">Orders</Link>
-        {user?.uid ? (
+        {user?.uid ? (<>
+          <Link to="/orders">Orders</Link>
           <Link onClick={handleLogOut} to="/login">
             Logout
           </Link>
+        </>
         ) : (
           <Link to="/login">Login</Link>
         )}

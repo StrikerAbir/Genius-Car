@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Context/AuthProvider";
 import checkout from "../../assets/images/checkout/checkout.png";
 import OrderRow from "./OrderRow/OrderRow";
+import toast from "react-hot-toast";
 
 const Orders = () => {
   const { user } = useContext(AuthContext);
@@ -13,6 +14,23 @@ const Orders = () => {
       .then((res) => res.json())
       .then((data) => setOrders(data));
   }, [user?.email]);
+    
+    const handleDelete = (id) => {
+      const proceed = window.confirm("Are you sure? want to remove order.");
+      if (proceed) {
+        fetch(`http://localhost:1000/orders/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+            .then((data) => {
+                if (data.deletedCount > 0) {
+                    toast.success("Order removed");
+                    const remaining = orders.filter(order => order._id !== id);
+                    setOrders(remaining);
+              }
+          });
+      }
+    };
   return (
     <div>
       <div className="relative">
@@ -27,12 +45,16 @@ const Orders = () => {
           <h4 className="text-xl font-semibold text-white">{user?.email}</h4>
         </div>
       </div>
-      <div className="overflow-x-auto w-full">
+      <div className="overflow-x-auto w-full my-10">
         <table className="table w-full">
           <tbody>
-            {orders.map((order) => 
-              <OrderRow key={order._id} order={order}></OrderRow>
-            )}
+            {orders.map((order) => (
+              <OrderRow
+                key={order._id}
+                order={order}
+                handleDelete={handleDelete}
+              ></OrderRow>
+            ))}
           </tbody>
         </table>
       </div>
