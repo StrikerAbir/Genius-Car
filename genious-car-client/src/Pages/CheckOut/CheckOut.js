@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { useLoaderData } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthProvider";
 import checkout from "../../assets/images/checkout/checkout.png";
+import toast, { Toaster } from "react-hot-toast";
+
 const CheckOut = () => {
   const { user } = useContext(AuthContext);
   const service = useLoaderData();
@@ -25,6 +27,27 @@ const CheckOut = () => {
             phone,
             message
         }
+
+        fetch("http://localhost:1000/orders", {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify(order)
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.acknowledged) {
+                    form.reset();
+                    alert('Place order.');
+                    toast.success("Successfully Ordered!");
+                } else {
+                    toast.error("Failed to Order!");
+                }
+            })
+        .catch(err=> console.error(err))
+
     }
     
     
