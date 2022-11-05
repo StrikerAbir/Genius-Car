@@ -17,50 +17,53 @@ const Orders = () => {
     })
       .then((res) => {
         if (res.status === 401 || res.status === 403) {
-          logOut()
+         return logOut()
         }
         return res.json()
       })
       .then((data) => setOrders(data));
-  }, [user?.email]);
+  }, [user?.email, logOut]);
     
     const handleDelete = (id) => {
       const proceed = window.confirm("Are you sure? want to remove order.");
       if (proceed) {
         fetch(`http://localhost:1000/orders/${id}`, {
           method: "DELETE",
+          headers: {
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         })
           .then((res) => res.json())
-            .then((data) => {
-                if (data.deletedCount > 0) {
-                    toast.success("Order removed");
-                    const remaining = orders.filter(order => order._id !== id);
-                    setOrders(remaining);
-              }
+          .then((data) => {
+            if (data.deletedCount > 0) {
+              toast.success("Order removed");
+              const remaining = orders.filter((order) => order._id !== id);
+              setOrders(remaining);
+            }
           });
       }
     };
 
     const handleStatus = id => {
         fetch(`http://localhost:1000/orders/${id}`, {
-            method: 'PATCH',
-            headers:{
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({status:'Approved'})
+          method: "PATCH",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ status: "Approved" }),
         })
-        .then(res=>res.json())
-            .then(data => {
-                console.log(data)
-                if (data.modifiedCount > 0) {
-                    const remaining = orders.filter(order => order._id !== id);
-                    const approved = orders.find(order => order._id === id);
-                    approved.status = 'Approved';
-                    const newOrders = [...remaining, approved];
-                    setOrders(newOrders);
-
-                }
-            })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            if (data.modifiedCount > 0) {
+              const remaining = orders.filter((order) => order._id !== id);
+              const approved = orders.find((order) => order._id === id);
+              approved.status = "Approved";
+              const newOrders = [...remaining, approved];
+              setOrders(newOrders);
+            }
+          });
     }
   return (
     <div>

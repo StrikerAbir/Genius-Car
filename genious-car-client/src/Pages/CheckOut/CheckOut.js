@@ -29,24 +29,25 @@ const CheckOut = () => {
         }
 
         fetch("http://localhost:1000/orders", {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify(order)
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(order),
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                if (data.acknowledged) {
-                    form.reset();
-                    alert('Place order.');
-                    toast.success("Successfully Ordered!");
-                } else {
-                    toast.error("Failed to Order!");
-                }
-            })
-        .catch(err=> console.error(err))
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            if (data.acknowledged) {
+              form.reset();
+              alert("Place order.");
+              toast.success("Successfully Ordered!");
+            } else {
+              toast.error("Failed to Order!");
+            }
+          })
+          .catch((err) => console.error(err));
 
     }
     
