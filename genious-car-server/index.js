@@ -10,12 +10,30 @@ const jwt= require('jsonwebtoken')
 app.use(cors());
 app.use(express.json());
 
+// env variable datas
 const user = process.env.DB_USER;
 const password = process.env.PASS
+const Secret = process.env.ACCESS_TOKEN_SECRET
+
 const uri = `mongodb+srv://${user}:${password}@cluster0.nvx6pod.mongodb.net/?retryWrites=true&w=majority`;
 
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+
+function verifyJWT(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        res.status(401).send({message: 'Unauthorized access'})
+    }
+    const token = authHeader.split(' ')[1];
+    jwt.verify(token, Secret, function (err, decoded) {
+        if (err) {
+            res.status(401).send({message:'Unauthorized access'})
+        }
+        req.decoded = decoded;
+        next()
+    })
+}
 
 async function run() {
     try {
@@ -25,7 +43,7 @@ async function run() {
         app.post('/jwt', (req, res) => {
             const user = req.body;
             console.log(user);
-            const token = jwt.sign(user,process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign(user,Secret, { expiresIn: '1h' });
             res.send({token});
         })
 
@@ -45,7 +63,7 @@ async function run() {
 
         // orders api
 
-        app.get('/orders', async (req, res) => {
+        app.get('/orders',verifyJWT, async (req, res) => {
             let query = {};
             console.log(req.query)
             if (req.query.email) {
