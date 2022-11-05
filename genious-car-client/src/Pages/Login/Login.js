@@ -37,7 +37,7 @@ const Login = () => {
             // local storage is not best place to store jwt data. but easy
             localStorage.setItem('token', data.token);
           })
-        // navigate(from, { replace: true });
+        navigate(from, { replace: true });
       })
       .catch((err) => console.error(err));
 

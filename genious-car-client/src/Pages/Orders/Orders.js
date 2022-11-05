@@ -5,7 +5,7 @@ import OrderRow from "./OrderRow/OrderRow";
 import toast from "react-hot-toast";
 
 const Orders = () => {
-  const { user } = useContext(AuthContext);
+  const { user,logOut } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
  console.log(orders);
  console.log(user);
@@ -15,7 +15,12 @@ const Orders = () => {
         authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 401 || res.status === 403) {
+          logOut()
+        }
+        return res.json()
+      })
       .then((data) => setOrders(data));
   }, [user?.email]);
     
