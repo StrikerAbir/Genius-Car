@@ -19,29 +19,26 @@ const Login = () => {
         const user = result.user;
         form.reset();
         const currentUser = {
-          email:user.email
-        }
+          email: user.email,
+        };
         console.log(currentUser);
         //get jwt token
-        fetch("http://localhost:1000/jwt", {
+        fetch("https://genious-car-server-wheat.vercel.app/jwt", {
           method: "POST",
           headers: {
-            'content-type':'application/json'
+            "content-type": "application/json",
           },
-          body: JSON.stringify(currentUser)
-
+          body: JSON.stringify(currentUser),
         })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
             // local storage is not best place to store jwt data. but easy
-            localStorage.setItem('token', data.token);
-          })
+            localStorage.setItem("token", data.token);
+          });
         navigate(from, { replace: true });
       })
       .catch((err) => console.error(err));
-
-    
   };
 
   return (

@@ -7,51 +7,49 @@ import toast from "react-hot-toast";
 const CheckOut = () => {
   const { user } = useContext(AuthContext);
   const service = useLoaderData();
-  const {_id, title, price } = service;
-    const handlePlaceOrder = event => {
-        event.preventDefault();
-        const form = event.target;
-        const first = form.first.value;
-        const last = form.last.value;
-        const name = `${first} ${last}`;
-        const email = form.email.value;
-        const phone = form.phone.value;
-        const message= form.message.value;
-        
-        const order = { 
-            service: _id,
-            serviceName: title,
-            price,
-            customer: name,
-            email,
-            phone,
-            message
+  const { _id, title, price } = service;
+  const handlePlaceOrder = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const first = form.first.value;
+    const last = form.last.value;
+    const name = `${first} ${last}`;
+    const email = form.email.value;
+    const phone = form.phone.value;
+    const message = form.message.value;
+
+    const order = {
+      service: _id,
+      serviceName: title,
+      price,
+      customer: name,
+      email,
+      phone,
+      message,
+    };
+
+    fetch("https://genious-car-server-wheat.vercel.app/orders", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(order),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        if (data.acknowledged) {
+          form.reset();
+          alert("Place order.");
+          toast.success("Successfully Ordered!");
+        } else {
+          toast.error("Failed to Order!");
         }
+      })
+      .catch((err) => console.error(err));
+  };
 
-        fetch("http://localhost:1000/orders", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify(order),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            if (data.acknowledged) {
-              form.reset();
-              alert("Place order.");
-              toast.success("Successfully Ordered!");
-            } else {
-              toast.error("Failed to Order!");
-            }
-          })
-          .catch((err) => console.error(err));
-
-    }
-    
-    
   return (
     <div>
       <div className="relative">
@@ -63,30 +61,34 @@ const CheckOut = () => {
           <h2 className="text-4xl font-bold  text-orange-600 my-5">{title}</h2>
           <h4 className="text-xl font-semibold text-white">Price : ${price}</h4>
         </div>
-          </div>
-          
+      </div>
+
       <div className="flex justify-center  bg-[#F3F3F3] rounded-lg my-10">
         <form onSubmit={handlePlaceOrder} className="mt-10 w-11/12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <input name='first'
+            <input
+              name="first"
               type="text"
               placeholder="First Name"
               className="input input-bordered w-full "
               required
             />
-            <input name='last'
+            <input
+              name="last"
               type="text"
               placeholder="Last Name"
               className="input input-bordered w-full "
               required
             />
-            <input name='phone'
+            <input
+              name="phone"
               type="text"
               placeholder="Your Phone"
               className="input input-bordered w-full "
               required
             />
-            <input name='email'
+            <input
+              name="email"
               type="email"
               placeholder="Your Email"
               className="input input-bordered w-full "
@@ -95,8 +97,8 @@ const CheckOut = () => {
             />
           </div>
           <div className="my-10">
-                      <textarea
-                          name='message'
+            <textarea
+              name="message"
               className="textarea textarea-bordered w-full h-52"
               placeholder="Your Message"
             ></textarea>

@@ -25,7 +25,9 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:1000/services/${params.id}`),
+          fetch(
+            `https://genious-car-server-wheat.vercel.app/services/${params.id}`
+          ),
       },
       {
         path: "/orders",

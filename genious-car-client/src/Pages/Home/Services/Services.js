@@ -4,11 +4,11 @@ import ServiceCard from "./SeviceCard/ServiceCard";
 const Services = () => {
   const [services, setServices] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:1000/services")
+    fetch("https://genious-car-server-wheat.vercel.app/services")
       .then((response) => response.json())
       .then((data) => setServices(data));
   }, []);
-    
+
   return (
     <div className="my-28">
       <div className="text-center">

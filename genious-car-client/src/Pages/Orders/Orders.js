@@ -5,66 +5,69 @@ import OrderRow from "./OrderRow/OrderRow";
 import toast from "react-hot-toast";
 
 const Orders = () => {
-  const { user,logOut } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
- console.log(orders);
- console.log(user);
+  console.log(orders);
+  console.log(user);
   useEffect(() => {
-    fetch(`http://localhost:1000/orders?email=${user.email}`, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`
+    fetch(
+      `https://genious-car-server-wheat.vercel.app/orders?email=${user.email}`,
+      {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }
-    })
+    )
       .then((res) => {
         if (res.status === 401 || res.status === 403) {
-         return logOut()
+          return logOut();
         }
-        return res.json()
+        return res.json();
       })
       .then((data) => setOrders(data));
   }, [user?.email, logOut]);
-    
-    const handleDelete = (id) => {
-      const proceed = window.confirm("Are you sure? want to remove order.");
-      if (proceed) {
-        fetch(`http://localhost:1000/orders/${id}`, {
-          method: "DELETE",
-          headers: {
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.deletedCount > 0) {
-              toast.success("Order removed");
-              const remaining = orders.filter((order) => order._id !== id);
-              setOrders(remaining);
-            }
-          });
-      }
-    };
 
-    const handleStatus = id => {
-        fetch(`http://localhost:1000/orders/${id}`, {
-          method: "PATCH",
-          headers: {
-            "content-type": "application/json",
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({ status: "Approved" }),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-            if (data.modifiedCount > 0) {
-              const remaining = orders.filter((order) => order._id !== id);
-              const approved = orders.find((order) => order._id === id);
-              approved.status = "Approved";
-              const newOrders = [...remaining, approved];
-              setOrders(newOrders);
-            }
-          });
+  const handleDelete = (id) => {
+    const proceed = window.confirm("Are you sure? want to remove order.");
+    if (proceed) {
+      fetch(`https://genious-car-server-wheat.vercel.app/orders/${id}`, {
+        method: "DELETE",
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.deletedCount > 0) {
+            toast.success("Order removed");
+            const remaining = orders.filter((order) => order._id !== id);
+            setOrders(remaining);
+          }
+        });
     }
+  };
+
+  const handleStatus = (id) => {
+    fetch(`https://genious-car-server-wheat.vercel.app/orders/${id}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ status: "Approved" }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.modifiedCount > 0) {
+          const remaining = orders.filter((order) => order._id !== id);
+          const approved = orders.find((order) => order._id === id);
+          approved.status = "Approved";
+          const newOrders = [...remaining, approved];
+          setOrders(newOrders);
+        }
+      });
+  };
   return (
     <div>
       <div className="relative">
@@ -86,8 +89,8 @@ const Orders = () => {
               <OrderRow
                 key={order._id}
                 order={order}
-                    handleDelete={handleDelete}
-                    handleStatus={handleStatus}
+                handleDelete={handleDelete}
+                handleStatus={handleStatus}
               ></OrderRow>
             ))}
           </tbody>
