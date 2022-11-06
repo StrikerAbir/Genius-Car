@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import img from "../../assets/images/login/login.svg";
 import { AuthContext } from '../../Context/AuthProvider';
 import toast from "react-hot-toast";
+import SocialLogin from '../../Shared/SocialLogin/SocialLogin';
+import { setAuthToken } from '../../utilities/authToken';
 
 const Signup = () => {
     const { user, createUser } = useContext(AuthContext);
@@ -16,6 +18,7 @@ const Signup = () => {
       createUser(email, password)
         .then((result) => {
           const user = result.user;
+          setAuthToken(user)
           form.reset();
           toast.success('Sign in successful.')
           console.log(user);
@@ -77,6 +80,9 @@ const Signup = () => {
                 />
               </div>
             </form>
+            <div className='mb-5'>
+              <SocialLogin></SocialLogin>
+            </div>
             <p className="text-center">
                     Already have an account?
               <Link className="text-orange-600 font-bold" to="/login">
