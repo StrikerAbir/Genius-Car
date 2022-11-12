@@ -48,7 +48,7 @@ async function run() {
         })
 
         app.get('/services', async (req, res) => {
-            // const query = {};
+            let query = {};
             // const query = {price:{$gt:100,$lt:300}};
             // const query = {price:{$eq:200}};
             // const query = {price:{$gte:200}};
@@ -58,9 +58,18 @@ async function run() {
             // const query = {price:{$nin:[20, 30,150]}};
             // const query = {price:{$not:{$gt:150}}};
             // const query = {$and: [{price: {$gt:20}},{price:{$gt:100}}]};
-            const query = {$or: [{price: {$gt:20}},{price:{$gt:100}}]};
+            // const query = {$or: [{price: {$gt:20}},{price:{$gt:100}}]};
             
-            
+            const search = req.query.search;
+            if (search.length) {
+                query = {
+                  $text: {
+                    $search: search,
+                  },
+                };
+            }
+             
+            console.log(search);
             const order = req.query.order === 'asc' ? 1 : -1;
             console.log(order)
             const cursor = servicesCollection.find(query).sort({price:order});

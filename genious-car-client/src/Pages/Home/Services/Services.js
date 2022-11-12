@@ -1,16 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ServiceCard from "./SeviceCard/ServiceCard";
 
 
 const Services = () => {
   const [isAsc, setIsAsc] = useState(true);
   const [services, setServices] = useState([]);
+  const [search, setSearch] = useState('');
+  const searchRef = useRef();
+
   useEffect(() => {
-    fetch(`http://localhost:1000/services?order=${isAsc?'asc':'desc'}`)
+    fetch(`http://localhost:1000/services?search=${search}&order=${isAsc?'asc':'desc'}`)
       .then((response) => response.json())
       .then((data) => setServices(data));
-  }, [isAsc]);
+  }, [isAsc,search]);
 
+
+  const handleSearch = () => {
+    const value=(searchRef.current.value);
+    setSearch(value)
+  }
   return (
     <div className="my-28">
       <div className="text-center">
@@ -21,8 +29,36 @@ const Services = () => {
           humour, <br />
           or randomised words which don't look even slightly believable.
         </p>
+        <div className="w-full flex justify-center">
+          <div>
+            <div className="input-group">
+              <input
+                ref={searchRef}
+                type="text"
+                placeholder="Search…"
+                className="input input-md input-bordered"
+              />
+              <button onClick={handleSearch} className="btn btn-square">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
         <button
-          className="my-5 border-2 rounded btn bg-white text-orange-600 hover:border-none hover:text-white border-orange-600 hover:bg-orange-600"
+          className="my-5 btn btn-sm border p-1 rounded  bg-white text-orange-600 hover:border-none hover:text-white border-orange-600 hover:bg-orange-600"
           onClick={() => setIsAsc(!isAsc)}
         >
           Sort by: {isAsc ? "desc" : "asc"}
